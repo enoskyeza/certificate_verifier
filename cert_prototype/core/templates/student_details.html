@@ -1,8 +1,14 @@
-<!-- core/templates/student_detail.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Detail</title>
+</head>
+<body>
+    <h1>{{ student.name }}</h1>
+    <p>Course Status: {{ student.course_status }}</p>
 
-<h1>{{ student.name }}</h1>
-<p>Course Status: {{ student.course_status }}</p>
-{% if student.qr_code %}
-    <img src="{{ student.qr_code.url }}" alt="QR Code">
-{% endif %}
-
+    {% if student.qr_code %}
+        <img src="{{ student.qr_code.url }}" alt="QR Code">
+    {% endif %}
+</body>
+</html>
