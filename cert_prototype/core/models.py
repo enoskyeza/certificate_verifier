@@ -3,6 +3,7 @@ from django.urls import reverse
 import qrcode
 from io import BytesIO
 from django.core.files import File
+from django.conf import settings
 
 
 # Create your models here.
@@ -32,7 +33,7 @@ class Student(models.Model):
     def save(self, *args, **kwargs):
         # Generate a URL  for the student detail view
         super().save(*args, **kwargs)
-        student_detail_url = request.build_absolute_uri(reverse('student-details', args=[self.pk]))
+        student_detail_url = f"{settings.BASE_URL}{reverse('student-details', args=[self.pk])}"
 
         # Generate QR code content with the student detail URL
         # qr_content = f"Student Detail URL: {student_detail_url}\nName: {self.name}\nCourse Status: {self.get_course_status_display()}"
