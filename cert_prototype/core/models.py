@@ -9,19 +9,19 @@ from django.core.files import File
 # core/models.py
 
 class Student(models.Model):
-    COURSE_CHOICES = {
-        'FLD': 'Fresh Learner Driving',
-        'ALD': 'Advanced Learner Driving',
-        'DD': 'Defensive Driving',
-    }
+    COURSE_CHOICES = [
+        ('FLD', 'Fresh Learner Driving'),
+        ('ALD', 'Advanced Learner Driving'),
+        ('DD', 'Defensive Driving')
+    ]
 
-    COURSE_STATUS = {
-        'complete': 'Complete',
-        'enrolling': 'Enrolling',
-    }
+    COURSE_STATUS = [
+        ('complete', 'Complete'),
+        ('enrolling', 'Enrolling'),
+    ]
 
     name = models.CharField(max_length=100)
-    company_name = models.CharField(max_length=100)
+    company = models.CharField(max_length=100, null=True, blank=True)
     student_id = models.CharField(max_length=10, unique=True)  # Self generating
     # pay_status = models.CharField(max_length=20, choices=[('paid', 'Paid'), ('pending', 'Pending')])
     course = models.CharField(max_length=50, choices=COURSE_CHOICES)
@@ -31,10 +31,11 @@ class Student(models.Model):
 
     def save(self, *args, **kwargs):
         # Generate a URL  for the student detail view
-        student_detail_url = reverse('student_details', args[self.pk])
+        super().save(*args, **kwargs)
+        student_detail_url = request.build_absolute_uri(reverse('student-details', args=[self.pk]))
 
         # Generate QR code content with the student detail URL
-        qr_content = f"Student Detail URL: {student_detail_url}\nName: {self.name}\nCourse Status: {self.get_course_status_display()}"
+        # qr_content = f"Student Detail URL: {student_detail_url}\nName: {self.name}\nCourse Status: {self.get_course_status_display()}"
 
         # Generate QR code
         qr = qrcode.QRCode(
@@ -43,7 +44,7 @@ class Student(models.Model):
             box_size=10,
             border=4,
         )
-        qr.add_data(qr_content)
+        qr.add_data(student_detail_url)
         qr.make(fit=True)
 
         # Save the generated QR code as an image file

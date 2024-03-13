@@ -4,12 +4,22 @@
     <title>Student Detail</title>
 </head>
 <body>
+    <h1 style="color: green">CERTIFIED</h1>
+    <p>This is to certify that the mentions student below completed the said course from prestige driving school uganda</p>
+    <img src="" alt="image of certificate">
 
-    <h1>Name: {{ student.name }}</h1>
-    <p>Course Status: {{ student.course_status }}</p>
+    <div>
+        <img src="" alt="image of student">
+        <h3>Name: {{ student.name }}</h3>
+        <p>ID No: {{ student.student_id }}</p>
+        <p>Course: {{ student.course }}</p>
+        <p>Company Name: {{ student.company }}</p>
+        <p>Date of issue: {{ student.issue_date }}</p>
+        <p>Course Status: {{ student.course_status }}</p>
 
-    {% if student.qr_code %}
-        <img src="{{ student.qr_code.url }}" alt="QR Code">
-    {% endif %}
+        {% if student.qr_code %}
+            <img src="{{student.qr_code.url}}" alt="QR Code">
+        {% endif %}
+    </div>
 </body>
 </html>
